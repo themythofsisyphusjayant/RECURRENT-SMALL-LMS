@@ -1,3 +1,7 @@
+![Recurrent header](https://capsule-render.vercel.app/api?type=waving&color=gradient&height=180&section=header&text=Recurrent%20Small%20LMs&fontSize=42&animation=fadeIn)
+
+![Typing](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=F472B6&width=650&lines=More+loops+at+test+time?+No.;Perplexity+29.4+to+4.4,+then+flat.;Measured,+not+promised.)
+
 <div align="center">
 
 # 🔁 Recurrent Small Language Models
@@ -91,3 +95,31 @@ Regenerate figures: `python3 scripts/make_figures.py` (needs matplotlib + numpy)
 **Jayant Dubey** · October 2026
 
 </div>
+
+---
+
+## 🗺️ Project map
+
+```mermaid
+flowchart TD
+    RUN["Training run — 4,850 steps, Kaggle T4, TinyStories 120M tokens"] --> MODEL["44M recurrent model — prelude, loop x4, coda"]
+    MODEL --> SWEEP["Loop-depth sweep — 1, 2, 4, 8, 12, 16 loops + bootstrap CIs"]
+    SWEEP --> FIG["figures/ — sweep curve, architecture, KV heatmap, 3D surface"]
+    FIG --> REPORT["report/ — 22-page two-column technical report (PDF + LaTeX)"]
+    SCRIPTS["scripts/make_figures.py — regenerate every figure"] --> FIG
+```
+
+## 📊 At a glance (verified 30 Oct 2026)
+
+| Measure | Value |
+|---|---|
+| Question | Do recurrent transformers gain anything from running extra loops at test time? |
+| Answer | No — perplexity cliff-dives 29.4 → 4.4 from loops 1 → 4 (the trained depth), then flatlines |
+| Sweep | Loops 1 / 2 / 4 / 8 / 12 / 16 → perplexity 29.38 / 11.18 / 4.41 / 4.90 / 4.91 / 4.91, with 95% bootstrap CIs |
+| Beyond trained depth | 4 → 8 degrades for real: +0.106 loss, CI [+0.101, +0.110] |
+| Reference model | 43,974,722 parameters, dim 512, GPT-2 BPE (50,257) |
+| Architecture | Prelude (6 layers) → loop block ×4 (8 MoE experts, GQA attention) → coda (2 layers) → logits |
+| Training | TinyStories, 120M tokens, loss 9.52 → 1.53; 4,850 steps on a Kaggle T4, October 2026 |
+| GQA payoff | At batch 8 / 2k context the MHA cache (403 MB) is 4× the weights — GQA reclaims ~300 MB |
+| Report | 22-page two-column technical report (PDF + full LaTeX sources in report/) |
+| Honesty rule | Proposed experiments are labelled proposed; the only executed study is the loop sweep |
