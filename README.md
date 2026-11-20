@@ -33,6 +33,10 @@ means do not overlap ([4.28, 4.55] at 4 loops vs [4.75, 5.06] at 8).
 Test-time loop scaling saturates at the trained depth and slightly
 degrades beyond it.
 
+![Perplexity vs test-time loops, with 95% bootstrap CIs](docs/perplexity-vs-loops.png)
+
+*Perplexity vs test-time loops (the verified sweep-table numbers, log scale): 29.38 at 1 loop falls to 4.41 at the trained depth of 4, then flatlines at ~4.91 — extra loops buy nothing. Error bars are the 95% bootstrap CIs; they are barely visible because the intervals are tight.*
+
 ![3D saturation surface: both metrics fall to loop 4, then flatline](figures/fig4_3d_saturation.png)
 
 ## How the sweep was run
